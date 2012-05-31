@@ -1,0 +1,40 @@
+info it worked if it ends with ok
+verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+verbose cli   'test' ]
+info using npm@1.1.0-beta-10
+info using node@v0.6.7
+verbose config file C:\Users\Angel\.npmrc
+verbose config file C:\Program Files\nodejs\etc\npmrc
+verbose config file C:\Program Files\nodejs\node_modules\npm\npmrc
+verbose mkdir done: C:\Users\Angel\AppData\Roaming\npm 755
+verbose caching C:\Git\SimpleActors\package.json
+verbose loadDefaults simpleactors@0.0.1-alfa
+verbose run-script [ 'pretest', 'test', 'posttest' ]
+info pretest simpleactors@0.0.1-alfa
+info test simpleactors@0.0.1-alfa
+verbose unsafe-perm in lifecycle true
+silly exec cmd "/c" "nodeunit test"
+silly spawning [ 'cmd', [ '/c', 'nodeunit test' ], 'C:\\Git\\SimpleActors' ]
+info simpleactors@0.0.1-alfa Failed to exec test script
+ERR! simpleactors@0.0.1-alfa test: `nodeunit test`
+ERR! `cmd "/c" "nodeunit test"` failed with 1
+ERR! 
+ERR! Failed at the simpleactors@0.0.1-alfa test script.
+ERR! This is most likely a problem with the simpleactors package,
+ERR! not with npm itself.
+ERR! Tell the author that this fails on your system:
+ERR!     nodeunit test
+ERR! You can get their info via:
+ERR!     npm owner ls simpleactors
+ERR! There is likely additional logging output above.
+ERR! 
+ERR! System Windows_NT 6.0.6002
+ERR! command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "test"
+ERR! cwd C:\Git\SimpleActors
+ERR! node -v v0.6.7
+ERR! npm -v 1.1.0-beta-10
+ERR! code ELIFECYCLE
+ERR! message simpleactors@0.0.1-alfa test: `nodeunit test`
+ERR! message `cmd "/c" "nodeunit test"` failed with 1
+verbose exit [ 1, true ]
