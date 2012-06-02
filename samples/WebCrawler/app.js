@@ -101,9 +101,6 @@ downloader.harvester = simpleactors.asActor(harvester);
 harvester.resolver = simpleactors.asActor(resolver);
 resolver.downloader = simpleactors.asActor(downloader);
 
-if (!harvester.resolver.process)
-    console.log('no process');
-
 // Process arguments
 
 process.argv.forEach(function(arg) {
