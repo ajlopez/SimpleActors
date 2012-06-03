@@ -44,6 +44,54 @@ actor.download('http://...');
 `.asActor` creates a wrapper object having the same methods that the original one. When you call `actor.download(...)` 
 the download process is enqueued to be processed in a future event.
 
+### Callback
+
+It's not part of actor features, but you can retrieve the result of a method invocation if you add a callback function
+as last parameter:
+
+```js
+// Your object
+var obj = {
+	add: function(x, y) { return x+y; }
+};
+// Wrapped up as an actor
+var actor = simpleactors.asActor(obj);
+// Usual method invocation, but with additional callback
+actor.add(2, 3, function(result) {
+	console.log(result); // <-- 5
+});
+```
+
+A callback can received an error parameter:
+
+```js
+// Your object
+var obj = {
+	add: function(x, y) { return x+y; }
+};
+// Wrapped up as an actor
+var actor = simpleactors.asActor(obj);
+// Usual method invocation, but with additional callback
+actor.add(2, 3, function(err, result) {
+	console.log(result); // <-- 5
+});
+```
+
+The module detects at runtime if the callback has one or two arguments.
+
+If the final real method to invoke admits a callback, you MUST add an addition parameter true (mandatory):
+
+```js
+// Your object
+var fs = require('fs');
+// Wrapped up as an actor
+var fsactor = simpleactors.asActor(fs);
+// Contribed example, but it works
+fsactor.realpath('.', function(err, result) {
+	console.log(result); // <-- the full path of current directory
+});
+```
+
 ## Development
 
 ```
