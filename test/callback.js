@@ -1,5 +1,6 @@
 
-var simpleactors = require('../');
+var simpleactors = require('../'),
+    fs = require('fs');
 
 var obj = {
 	add: function(x, y) { return x + y; },
@@ -7,6 +8,7 @@ var obj = {
 };
 
 var actor = simpleactors.asActor(obj);
+var fsactor = simpleactors.asActor(fs);
 
 exports['Invoke with callback'] = function(test) {
     test.expect(2);
@@ -37,4 +39,18 @@ exports['Get error'] = function(test) {
         test.ok(err.toString().indexOf('Reference') >= 0);
 		test.done();
 	});
+}
+
+exports['Invoke using async callback'] = function(test) {
+    test.expect(2);
+    
+    var path = fs.realpathSync('.');
+
+	fsactor.realpath(".", function(err, result) {
+        test.ok(!err);
+        test.equal(result, path);
+		test.done();
+	},
+    true // use the callback in final invocation
+    );
 }
