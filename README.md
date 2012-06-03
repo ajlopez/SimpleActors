@@ -24,6 +24,8 @@ Via npm on Node:
 npm install simpleactors
 ```
 
+Reference in your program:
+
 ```js
 var simpleactors = require('simpleactors');
 ```
@@ -31,12 +33,11 @@ var simpleactors = require('simpleactors');
 ## Usage
 
 ```js
-var simpleactors = require('simpleactors');
-
-// ...
-
+// Your object
 var obj = new Downloader();
+// Wrapped up as an actor
 var actor = simpleactors.asActor(obj);
+// Usual method invocation, wo/waiting the result
 actor.download('http://...');
 ```
 
