@@ -62,7 +62,7 @@ actor.add(2, 3, function(result) {
 });
 ```
 
-A callback can received an error parameter:
+A callback can receive an error parameter:
 
 ```js
 // Your object
@@ -77,7 +77,8 @@ actor.add(2, 3, function(err, result) {
 });
 ```
 
-The module detects at runtime if the callback has one or two arguments.
+The module detects at runtime if the callback has one or two arguments. In the latter case, the first one is
+considered the err receiver, and the second is the result of invocation.
 
 If the final real method to invoke admits a callback, you MUST add an addition parameter true (mandatory):
 
@@ -89,7 +90,9 @@ var fsactor = simpleactors.asActor(fs);
 // Contribed example, but it works
 fsactor.realpath('.', function(err, result) {
 	console.log(result); // <-- the full path of current directory
-});
+	},
+	true  <-- additional parameter
+	);
 ```
 
 ## Development
