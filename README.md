@@ -95,6 +95,10 @@ fsactor.realpath('.', function(err, result) {
 	);
 ```
 
+### Messages
+
+TBD
+
 ## Development
 
 ```
