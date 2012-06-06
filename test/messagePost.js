@@ -4,10 +4,10 @@ var simpleactors = require('../');
 exports['Message Post with Sender'] = function(test) {
     test.expect(1);
     
-    var sum1 = new Sum(test);
-    var sum2 = new Sum(test);
-    var actor1 = simpleactors.asMessageActor(sum1);
-    var actor2 = simpleactors.asMessageActor(sum2);
+    var actor1 = new Sum(test);
+    var actor2 = new Sum(test);
+    simpleactors.buildActor(actor1);
+    simpleactors.buildActor(actor2);
     
     actor1.post({ value: 4, sum: 0 }, actor2);
 }
