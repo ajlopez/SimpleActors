@@ -97,7 +97,40 @@ fsactor.realpath('.', function(err, result) {
 
 ### Messages
 
-TBD
+But, where are the messages? Well, the message is the method name and its arguments (a la Smalltalk). But if you
+prefer a more direct way of sending message, you can write a "class" with a `process` message method:
+
+```js
+function Sum() {
+    this.process = function(msg, sender)
+    {
+        var newmsg = { value: msg.value-1, sum: msg.sum + msg.value };
+
+        if (newmsg.value == 0)
+        {
+            return;
+        }
+
+        sender.post(newmsg, this);
+    }
+}
+```
+
+The objects can be enriched with a new method `post(msg, sender)`:
+
+```js
+var actor1 = new Sum();
+var actor2 = new Sum();
+simpleactors.buildActor(actor1);
+simpleactors.buildActor(actor2);
+actor1.post({ value: 10, sum: 0 }, actor2);
+```
+
+If there is other method for message processing, it can be specified in:
+
+```js
+simpleactors.buildActor(actor1,'mymethod');
+```
 
 ## Development
 
@@ -110,9 +143,13 @@ npm test
 
 ## Samples
 
-[Web Crawler using agents](https://github.com/ajlopez/SimpleActors/tree/master/samples/WebCrawler) sample shows
+[Web Crawler using Agents](https://github.com/ajlopez/SimpleActors/tree/master/samples/WebCrawler) sample shows
 how you can create an application that don't depend on calling a method and receiving a response: each agent
 does its works, receiving calls and sending calls to other agents.
+
+[Web Crawler using Remote Agents](https://github.com/ajlopez/SimpleActors/tree/master/samples/WebCrawlerRemote) sample has a
+server that launch the web crawling process, and many clients can be launched that collaborates with the download and
+harvest of new links to process.
 
 ## Contribution
 
