@@ -1,7 +1,7 @@
 { "name": "simpleactors"
 , "description": "Simple Actor Model for Node.js, Work in Progress"
 , "keywords": [ "actormodel", "nodejs", "javascript" ]
-, "version": "0.0.2alpha"
+, "version": "0.0.2"
 , "author": "Angel 'Java' Lopez <webmaster@ajlopez.com> (http://www.ajlopez.com)"
 , "repository": { "type": "git", "url": "git://github.com/ajlopez/SimpleActors.git" }
 , "main": "./lib/simpleactors.js"
