@@ -45,5 +45,19 @@ exports['actor created with context has path'] = function(test) {
     test.done();
 }
 
+exports['actor has children'] = function(test) {
+    var system = simpleactors.create('MySystem');
+
+    var myactor = new MyActor();
+    var ref = system.actorOf(myactor, 'myactor');
+    var myactor2 = new MyActor();
+
+    var childref = myactor.context.actorOf(myactor2, 'mychildren');
+    test.ok(myactor.context.children);
+    test.ok(myactor.context.children.mychildren);
+    test.ok(myactor.context.children.mychildren === childref);
+    test.done();
+}
+
 function MyActor() {
 }
