@@ -2,7 +2,7 @@
 var simpleactors = require('../');
 
 exports['tell simple message'] = function(test) {
-    function done(msg) {
+    function done(msg, sender) {
         test.ok(msg, 'foo');
         test.done();
     }
