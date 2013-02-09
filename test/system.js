@@ -52,17 +52,30 @@ exports['system.actorOf using object'] = function(test) {
     var system = simpleactors.create('MySystem');
     var myactor = new MyActor();
     var actorref = system.actorOf(myactor);
-    
+
     test.ok(actorref);
     test.equal(typeof system, 'object');
-    
+
     test.ok(myactor.self);
     test.ok(myactor.self === actorref);
-    
+
     test.ok(myactor.context);
     test.ok(myactor.context.self);
     test.ok(myactor.context.self === actorref);
+
+    test.done();
+}
+
+exports['system.actorFor top object'] = function(test) {
+    var system = simpleactors.create('MySystem');
+    var myactor = new MyActor();
+    var actorref = system.actorOf(myactor, 'top');
     
+    var result = system.actorFor('top');
+    
+    test.ok(result);
+    test.ok(result === actorref);
+
     test.done();
 }
 
