@@ -79,5 +79,13 @@ exports['system.actorFor top object'] = function(test) {
     test.done();
 }
 
+exports['system.actorFor return null for unknown actor'] = function(test) {
+    var system = simpleactors.create('MySystem');
+    var actorref = system.actorFor('unknown');
+    test.equal(actorref, null);
+
+    test.done();
+}
+
 function MyActor() {
 }
