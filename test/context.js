@@ -59,5 +59,32 @@ exports['actor has children'] = function(test) {
     test.done();
 }
 
+exports['context.forActor'] = function(test) {
+    var system = simpleactors.create('MySystem');
+
+    var myactor = new MyActor();
+    var actorref = system.actorOf(myactor, 'myactor');
+    var myactor2 = new MyActor();
+    var childref = myactor.context.actorOf(myactor2, 'mychildren');
+    
+    var result = myactor.context.actorFor('mychildren');
+    test.ok(result);
+    test.ok(result === childref);
+
+    test.done();
+}
+
+exports['context.forActor returns null for unknown actor'] = function(test) {
+    var system = simpleactors.create('MySystem');
+
+    var myactor = new MyActor();
+    var actorref = system.actorOf(myactor, 'myactor');
+    
+    var result = myactor.context.actorFor('mychildren');
+    test.equal(result, null);
+
+    test.done();
+}
+
 function MyActor() {
 }
