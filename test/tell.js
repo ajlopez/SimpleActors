@@ -17,7 +17,7 @@ exports['tell simple message'] = function(test) {
 }
 
 function MyActor(done) {
-    this.receives = function (msg) {
+    this.receive = function (msg) {
         done(msg);
     }
 }
