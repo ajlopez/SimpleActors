@@ -57,7 +57,7 @@ An object wrapped as an actor has:
 - `self`: This actor reference.
 
 It should implement the function:
-- `receive(msg)`: Process an incoming actor
+- `receive(msg)`: Process an incoming message
 
 Example:
 ```js
@@ -79,22 +79,23 @@ this.context.actorOf(MyActor, name);
 
 How to get an actor reference in our actor object:
 ```js
-this.context.actorFor(path);
+var ref = this.context.actorFor(path);
 ```
 
 Examples:
 ```js
-this.context.actorFor('mychild'); // child of current actor
-this.context.actorFor('/myroot/myactor'); // actor in current system
+var refchild = this.context.actorFor('mychild'); // child of current actor
+var refactor = this.context.actorFor('/myroot/myactor'); // actor in current system
 ```
 
 How to get an actor reference in a system:
 ```js
-system.actorFor(path);
+var ref = system.actorFor(path);
 ```
 Example:
 ```js
-system.actorFor('/myroot/myactor'); // actor in current system
+var ref = system.actorFor('/myroot/myactor'); // actor in current system
+ref.tell('Hello');
 ```
 
 An actor system can run in many nodes (running process). 
