@@ -1,20 +1,17 @@
 # SimpleActors
 
-Simple Actor Model implementation. It wraps any Javascript object as an actor.
+Simple Actor Model implementation.
 
 See [Actor Model in Wikipedia](http://en.wikipedia.org/wiki/Actor_model).
 
-When an object is wrapped up as an actor, you can invoke its methods (not its properties), but they are
-not execute at the time of invocation. Instead they are executed in the event loop of Node.js.
-An agent can invoke other agents methods, or regular objects.
+## Description
+
+This implementation is inspired in [Akka actor implementation](http://doc.akka.io/docs/akka/2.1.0/general/index.html).
 
 This model encourage the writing of application consisting in actors that collaborates using message passing.
 In this module, method invocation is like a message passing operation, that not returns value. The application
 that uses actor model doesn't need continuation callbacks: each agent receives messages as method invocation, 
 and produces new messages calling other agent methods.
-
-As usual, inside a method, you can use all Node.js/Javascript power. It's recommended that any intensive IO work
-were done in asynchronous way, if possible.
 
 ## Installation
 
@@ -32,104 +29,104 @@ var simpleactors = require('simpleactors');
 
 ## Usage
 
+Create a system application:
 ```js
-// Your object
-var obj = new Downloader();
-// Wrapped up as an actor
-var actor = simpleactors.asActor(obj);
-// Usual method invocation, wo/waiting the result
-actor.download('http://...');
+var system = simpleactors.create('webcrawler');
 ```
 
-`.asActor` creates a wrapper object having the same methods that the original one. When you call `actor.download(...)` 
-the download process is enqueued to be processed in a future event.
-
-### Callback
-
-It's not part of actor features, but you can retrieve the result of a method invocation if you add a callback function
-as last parameter:
-
+Create an object of class `Downloader`, wrap it as an actor, and returns an actor reference:
 ```js
-// Your object
-var obj = {
-	add: function(x, y) { return x+y; }
-};
-// Wrapped up as an actor
-var actor = simpleactors.asActor(obj);
-// Usual method invocation, but with additional callback
-actor.add(2, 3, function(result) {
-	console.log(result); // <-- 5
-});
+var ref = system.actorOf(Downloader, 'downloader');
 ```
 
-A callback can receive an error parameter:
-
+Alternatively, you can use an already create object as first parameter:
 ```js
-// Your object
-var obj = {
-	add: function(x, y) { return x+y; }
-};
-// Wrapped up as an actor
-var actor = simpleactors.asActor(obj);
-// Usual method invocation, but with additional callback
-actor.add(2, 3, function(err, result) {
-	console.log(result); // <-- 5
-});
+var downloader = new Downloader();
+var ref = system.actorOf(downloader, 'downloader');
 ```
 
-The module detects at runtime if the callback has one or two arguments. In the latter case, the first one is
-considered the err receiver, and the second is the result of invocation.
+The second parameter is optional. A name is automatically assigned if the second parameter is missing.
 
-If the final real method to invoke admits a callback, you MUST add an addition parameter true (mandatory):
-
+Sends a message to an actor reference:
 ```js
-// Your object
-var fs = require('fs');
-// Wrapped up as an actor
-var fsactor = simpleactors.asActor(fs);
-// Contribed example, but it works
-fsactor.realpath('.', function(err, result) {
-	console.log(result); // <-- the full path of current directory
-	},
-	true  <-- additional parameter
-	);
+ref.tell(msg);
 ```
 
-### Messages
+An object wrapped as an actor has:
+- `context`: Actor context, with information about the actor environment.
+- `self`: This actor reference.
 
-But, where are the messages? Well, the message is the method name and its arguments (a la Smalltalk). But if you
-prefer a more direct way of sending message, you can write a "class" with a `process` message method:
+It should implement the function:
+- `receive(msg)`: Process an incoming actor
 
+Example:
 ```js
-function Sum() {
-    this.process = function(msg, sender)
-    {
-        var newmsg = { value: msg.value-1, sum: msg.sum + msg.value };
-
-        if (newmsg.value == 0)
-        {
-            return;
-        }
-
-        sender.post(newmsg, this);
-    }
+function Logger() {
+	this.receive = function (msg) {
+		console.log(msg);
+	}
 }
+
+var system = simpleactors.create('mysys');
+var ref = system.actorOf(Logger);
+ref.tell('Hello, world');
 ```
 
-The objects can be enriched with a new method `post(msg, sender)`:
-
+How to create an actor in our actor object:
 ```js
-var actor1 = new Sum();
-var actor2 = new Sum();
-simpleactors.buildActor(actor1);
-simpleactors.buildActor(actor2);
-actor1.post({ value: 10, sum: 0 }, actor2);
+this.context.actorOf(MyActor, name);
 ```
 
-If there is other method for message processing, it can be specified in:
-
+How to get an actor reference in our actor object:
 ```js
-simpleactors.buildActor(actor1,'mymethod');
+this.context.actorFor(path);
+```
+
+Examples:
+```js
+this.context.actorFor('mychild'); // child of current actor
+this.context.actorFor('/myroot/myactor'); // actor in current system
+```
+
+How to get an actor reference in a system:
+```js
+system.actorFor(path);
+```
+Example:
+```js
+system.actorFor('/myroot/myactor'); // actor in current system
+```
+
+An actor system can run in many nodes (running process). 
+```js
+var node = simpleactors.createNode(port [, host]);
+```
+
+Example creating a node, a system, and two actors:
+```js
+var node = simpleactors.createNode(3000);
+var system = node.create('mysys');
+var actor1 = system.actorOf(MyActor, 'actor1');
+var actor2 = actor1.context.actorOf(MyActor, 'actor2');
+// actor1.self.path === 'sactors://mysys@localhost:3000/actor1'
+// actor2.self.path === 'sactors://mysys@localhost:3000/actor1/actor2'
+```
+
+A node can connect to another running node. In node A:
+```js
+var node = simpleactors.createNode(3000);
+var system = node.create('mysys');
+var actor1 = system.actorOf(MyActor, 'actor1');
+node.start();
+```
+
+In node B:
+```js
+var node = simpleactors.createNode(3001);
+var system = node.create('mysys');
+var remoteref = system.actorFor('sactors://mysys@localhost:3000/actor1');
+node.start();
+remoteref.tell('hello');
 ```
 
 ## Development
@@ -149,7 +146,7 @@ does its works, receiving calls and sending calls to other agents.
 
 [Web Crawler using Remote Agents](https://github.com/ajlopez/SimpleActors/tree/master/samples/WebCrawlerRemote) sample has a
 server that launch the web crawling process, and many clients can be launched that collaborates with the download and
-harvest of new links to process.
+harvest of new links to process (Work in Progress, Refactoring).
 
 ## Versions
 
