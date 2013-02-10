@@ -79,6 +79,19 @@ exports['system.actorFor top object'] = function(test) {
     test.done();
 }
 
+exports['system.actorFor top object with root'] = function(test) {
+    var system = simpleactors.create('MySystem');
+    var myactor = new MyActor();
+    var actorref = system.actorOf(myactor, 'top');
+    
+    var result = system.actorFor('/top');
+    
+    test.ok(result);
+    test.ok(result === actorref);
+
+    test.done();
+}
+
 exports['system.actorFor return null for unknown actor'] = function(test) {
     var system = simpleactors.create('MySystem');
     var actorref = system.actorFor('unknown');

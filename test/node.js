@@ -1,5 +1,6 @@
 
-var simpleactors = require('../');
+var simpleactors = require('../'),
+    simplemessages = require('simplemessages');
 
 exports['Create Node in Localhost'] = function (test) {
     var node = simpleactors.createNode(3000);
@@ -34,6 +35,30 @@ exports['Create Actor in Node'] = function (test) {
     test.equal(actorref.path, 'sactors://mysys@localhost:3000/actor');
     
     test.done();
+}
+
+exports['Send Message to Remote Actor'] = function (test) {
+    var node = simpleactors.createNode(3000);
+    var system = node.create('mysys');
+    var actor = new MyActor();
+    
+    test.expect(2);
+
+    actor.receive = function (msg) {
+        test.ok(msg);
+        test.equal(msg, 'foo');
+        client.end();
+        node.stop();
+        test.done();
+    }
+
+    var actorref = system.actorOf(actor, 'actor');
+
+    node.start();
+    
+    var client = simplemessages.createClient(3000, null, function () {
+        client.write({ path: actorref.path, message: 'foo' });
+    });
 }
 
 function MyActor() {
