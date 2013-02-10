@@ -125,8 +125,8 @@ In node B:
 ```js
 var node = simpleactors.createNode(3001);
 var system = node.create('mysys');
+node.connect(3000);
 var remoteref = system.actorFor('sactors://mysys@localhost:3000/actor1');
-node.start();
 remoteref.tell('hello');
 ```
 
