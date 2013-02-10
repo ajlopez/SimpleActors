@@ -99,6 +99,34 @@ exports['Send Message from Node to Node'] = function (test) {
     remoteref.tell('foo');
 }
 
+exports['Send Message from Node to Remote Node'] = function (test) {
+    var node = simpleactors.createNode(3000);
+    var system = node.create('mysys');
+    var actor = new MyActor();
+    
+    test.expect(2);
+
+    actor.receive = function (msg) {
+        test.ok(msg);
+        test.equal(msg, 'foo');
+        node.stop();
+        node2.stop();
+        test.done();
+    }
+
+    var actorref = system.actorOf(actor, 'actor');
+
+    var node2 = simpleactors.createNode(3001);
+    var system2 = node2.create('mysys');
+    
+    node.start();
+    
+    node2.connect(3000, null, function() {
+        var remoteref = system2.actorFor(actorref.path);
+        remoteref.tell('foo');
+    });
+}
+
 function MyActor() {
 }
 
