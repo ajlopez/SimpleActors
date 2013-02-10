@@ -1,7 +1,27 @@
 
 var simpleactors = require('../');
 
-exports['Create Actor in Node'] = function(test) {
+exports['Create Node in Localhost'] = function (test) {
+    var node = simpleactors.createNode(3000);
+    
+    test.ok(node);
+    test.ok(node.name);
+    test.equal(node.name, "localhost:3000");
+
+    test.done();
+}
+
+exports['Create Node in Host'] = function (test) {
+    var node = simpleactors.createNode(3000, 'host');
+    
+    test.ok(node);
+    test.ok(node.name);
+    test.equal(node.name, "host:3000");
+
+    test.done();
+}
+
+exports['Create Actor in Node'] = function (test) {
     var node = simpleactors.createNode(3000);
     test.ok(node);
     
