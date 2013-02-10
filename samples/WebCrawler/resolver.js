@@ -20,7 +20,7 @@ function isHostName(hostname)
 function Resolver() {
     this.visited = {};
     
-    this.process = function(link) {
+    this.receive = function(link) {
         var urldata = url.parse(link);
 
         if (!isHostName(urldata.hostname))
@@ -30,7 +30,7 @@ function Resolver() {
             return;
 
         this.visited[link] = true;
-        this.downloader.process(link);
+        this.downloader.tell(link);
     }
     
     this.registerHost = function(link)

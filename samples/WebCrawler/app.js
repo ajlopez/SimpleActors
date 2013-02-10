@@ -9,15 +9,17 @@ var harvester = require('./harvester.js');
 
 // Actors
 
-var downloaderActor = simpleactors.asActor(downloader);
-var resolverActor = simpleactors.asActor(resolver);
-var harvesterActor = simpleactors.asActor(harvester);
+var webcrawler = simpleactors.create('webcrawler');
+
+var downloaderref = webcrawler.actorOf(downloader);
+var resolverref = webcrawler.actorOf(resolver);
+var harvesterref = webcrawler.actorOf(harvester);
 
 // Actors Collaboration
 
-downloader.harvester = harvesterActor;
-harvester.resolver = resolverActor;
-resolver.downloader = downloaderActor;
+downloader.harvester = harvesterref;
+harvester.resolver = resolverref;
+resolver.downloader = downloaderref;
 
 // Process arguments
 
@@ -25,7 +27,7 @@ process.argv.forEach(function(arg) {
     if (arg.indexOf("http:")==0)
     {
         resolver.registerHost(arg);
-        downloaderActor.process(arg);
+        downloaderref.tell(arg);
     }
 });
 

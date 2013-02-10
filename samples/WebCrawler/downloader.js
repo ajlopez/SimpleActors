@@ -3,8 +3,8 @@ var simpleactors = require('../../'),
     url = require('url');
 
 function Downloader() {    
-    this.process = function(link) {
-        var downloader = this;
+    this.receive = function(link) {
+        var self = this;
         var urldata = url.parse(link);
         
         options = {
@@ -18,7 +18,7 @@ function Downloader() {
                 console.log('Url: ' + link);
                 res.setEncoding('utf8');
                 res.on('data', function(data) {
-                    downloader.harvester.process(data);
+                    self.harvester.tell(data);
                 });
            }).on('error', function(e) {
                 console.log('Url: ' + link);
