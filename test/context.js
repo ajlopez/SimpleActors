@@ -87,6 +87,24 @@ exports['actorFor child using absolute path'] = function(test) {
     test.done();
 }
 
+exports['actorFor using levels'] = function(test) {
+    var system = simpleactors.create('MySystem');
+
+    var myactor = new MyActor();
+    var ref = system.actorOf(myactor, 'myactor');
+    var mychild = new MyActor();
+    var mygrandchild = new MyActor();
+
+    var childref = myactor.context.actorOf(mychild, 'mychild');
+    var grandchildref = mychild.context.actorOf(mygrandchild, 'mygrandchild');
+
+    var result = myactor.context.actorFor('mychild/mygrandchild');
+    test.ok(result);
+    test.ok(result === grandchildref);
+
+    test.done();
+}
+
 exports['actorFor parent'] = function(test) {
     var system = simpleactors.create('MySystem');
 
