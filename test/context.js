@@ -59,6 +59,20 @@ exports['actor has children'] = function(test) {
     test.done();
 }
 
+exports['actorFor parent'] = function(test) {
+    var system = simpleactors.create('MySystem');
+
+    var myactor = new MyActor();
+    var ref = system.actorOf(myactor, 'myactor');
+    var myactor2 = new MyActor();
+
+    var childref = myactor.context.actorOf(myactor2, 'mychildren');
+    
+    var result = myactor2.context.actorFor('..');
+    test.ok(result === ref);
+    test.done();
+}
+
 exports['context.forActor'] = function(test) {
     var system = simpleactors.create('MySystem');
 
