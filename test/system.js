@@ -106,6 +106,20 @@ exports['system.actorFor child object'] = function(test) {
     test.done();
 }
 
+exports['system.actorFor child object using full path'] = function(test) {
+    var system = simpleactors.create('MySystem');
+    var myactor = new MyActor();
+    var actorref = system.actorOf(myactor, 'top');
+    var childref = myactor.context.actorOf(MyActor, 'child');
+    
+    var result = system.actorFor(childref.path);
+    
+    test.ok(result);
+    test.ok(result === childref);
+
+    test.done();
+}
+
 exports['system.actorFor return null for unknown actor'] = function(test) {
     var system = simpleactors.create('MySystem');
     var actorref = system.actorFor('unknown');

@@ -45,17 +45,31 @@ exports['actor created with context has path'] = function(test) {
     test.done();
 }
 
-exports['actor has children'] = function(test) {
+exports['actor has child'] = function(test) {
     var system = simpleactors.create('MySystem');
 
     var myactor = new MyActor();
     var ref = system.actorOf(myactor, 'myactor');
     var myactor2 = new MyActor();
 
-    var childref = myactor.context.actorOf(myactor2, 'mychildren');
+    var childref = myactor.context.actorOf(myactor2, 'mychild');
     test.ok(myactor.context.children);
-    test.ok(myactor.context.children.mychildren);
-    test.ok(myactor.context.children.mychildren === childref);
+    test.ok(myactor.context.children.mychild);
+    test.ok(myactor.context.children.mychild === childref);
+    test.done();
+}
+
+exports['actorFor child using full path'] = function(test) {
+    var system = simpleactors.create('MySystem');
+
+    var myactor = new MyActor();
+    var ref = system.actorOf(myactor, 'myactor');
+    var myactor2 = new MyActor();
+
+    var childref = myactor.context.actorOf(myactor2, 'mychild');
+    var result = myactor.context.actorFor(childref.path);
+    test.ok(result);
+    test.ok(result === childref);
     test.done();
 }
 
@@ -98,9 +112,9 @@ exports['context.forActor'] = function(test) {
     var myactor = new MyActor();
     var actorref = system.actorOf(myactor, 'myactor');
     var myactor2 = new MyActor();
-    var childref = myactor.context.actorOf(myactor2, 'mychildren');
+    var childref = myactor.context.actorOf(myactor2, 'mychil');
     
-    var result = myactor.context.actorFor('mychildren');
+    var result = myactor.context.actorFor('mychil');
     test.ok(result);
     test.ok(result === childref);
 
