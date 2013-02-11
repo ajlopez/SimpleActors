@@ -38,10 +38,10 @@ exports['actor created with context has path'] = function(test) {
     var ref = system.actorOf(myactor, 'myactor');
     var myactor2 = new MyActor();
 
-    var actorref = myactor.context.actorOf(myactor2, 'mychildren');
+    var actorref = myactor.context.actorOf(myactor2, 'mychild');
     test.ok(actorref);
     test.ok(actorref.path);
-    test.equal(actorref.path, 'sactors://MySystem/myactor/mychildren');
+    test.equal(actorref.path, 'sactors://MySystem/myactor/mychild');
     test.done();
 }
 
@@ -66,10 +66,29 @@ exports['actorFor parent'] = function(test) {
     var ref = system.actorOf(myactor, 'myactor');
     var myactor2 = new MyActor();
 
-    var childref = myactor.context.actorOf(myactor2, 'mychildren');
+    var childref = myactor.context.actorOf(myactor2, 'mychild');
     
     var result = myactor2.context.actorFor('..');
     test.ok(result === ref);
+    test.done();
+}
+
+exports['actorFor sibling'] = function(test) {
+    var system = simpleactors.create('MySystem');
+
+    var myactor = new MyActor();
+    var ref = system.actorOf(myactor, 'myactor');
+    var mychild1 = new MyActor();
+    var mychild2 = new MyActor();
+
+    var child1ref = myactor.context.actorOf(mychild1, 'mychild1');
+    var child2ref = myactor.context.actorOf(mychild2, 'mychild2');
+
+    var result = mychild1.context.actorFor('../mychild2');
+    test.ok(result === child2ref);
+    result = mychild2.context.actorFor('../mychild1');
+    test.ok(result === child1ref);
+
     test.done();
 }
 
