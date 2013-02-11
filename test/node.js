@@ -2,6 +2,15 @@
 var simpleactors = require('../'),
     simplemessages = require('simplemessages');
 
+exports['Create Anonymous Node'] = function (test) {
+    var node = simpleactors.createNode();
+    
+    test.ok(node);
+    test.ok(!node.name);
+
+    test.done();
+}
+
 exports['Create Node in Localhost'] = function (test) {
     var node = simpleactors.createNode(3000);
     
