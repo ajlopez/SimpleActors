@@ -11,6 +11,16 @@ exports['Create Anonymous Node'] = function (test) {
     test.done();
 }
 
+exports['Create Node with Name'] = function (test) {
+    var node = simpleactors.createNode('localhost:3000');
+    
+    test.ok(node);
+    test.ok(node.name);
+    test.equal(node.name, 'localhost:3000');
+
+    test.done();
+}
+
 exports['Create Node in Localhost'] = function (test) {
     var node = simpleactors.createNode(3000);
     
