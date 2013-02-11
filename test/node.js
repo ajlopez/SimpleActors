@@ -104,6 +104,8 @@ exports['Send Message from Node to Remote Node'] = function (test) {
     var system = node.create('mysys');
     var actor = new MyActor();
     
+    node.start();
+    
     test.expect(2);
 
     actor.receive = function (msg) {
@@ -111,18 +113,18 @@ exports['Send Message from Node to Remote Node'] = function (test) {
         test.equal(msg, 'foo');
         node.stop();
         node2.stop();
+        remotenode.stop();
         test.done();
     }
 
     var actorref = system.actorOf(actor, 'actor');
 
     var node2 = simpleactors.createNode(3001);
-    var system2 = node2.create('mysys');
+    var remotenode = node2.createRemoteNode(3000);
+    var remotesystem = remotenode.create('mysys');
     
-    node.start();
-    
-    node2.connect(3000, null, function() {
-        var remoteref = system2.actorFor(actorref.path);
+    remotenode.start(function() {
+        var remoteref = remotesystem.actorFor('actor');
         remoteref.tell('foo');
     });
 }

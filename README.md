@@ -113,7 +113,7 @@ var actor2 = actor1.context.actorOf(MyActor, 'actor2');
 // actor2.self.path === 'sactors://mysys@localhost:3000/actor1/actor2'
 ```
 
-A node can connect to another running node. In node A:
+A node can refer to another running node. In node A:
 ```js
 var node = simpleactors.createNode(3000);
 var system = node.create('mysys');
@@ -124,10 +124,13 @@ node.start();
 In node B:
 ```js
 var node = simpleactors.createNode(3001);
-var system = node.create('mysys');
-node.connect(3000);
-var remoteref = system.actorFor('sactors://mysys@localhost:3000/actor1');
-remoteref.tell('hello');
+var remotenode = node.createRemoteNode(3000);
+var remotesystem = remotenode.create('mysys');
+var remoteref = remotesystem.actorFor('/actor1');
+remotenode.start(function () {
+	// after connection, you can tell messages to remote actors
+	remoteref.tell('hello'); 
+});
 ```
 
 ## Development
