@@ -16,7 +16,7 @@ exports['system.actorOf has path'] = function(test) {
     
     test.ok(actorref);
     test.ok(actorref.path);
-    test.equal(actorref.path, "sactors://my-sys/1");
+    test.equal(actorref.path, "sactors://my-sys/_1");
     
     test.done();
 }
@@ -28,11 +28,11 @@ exports['two system actors with paths'] = function(test) {
 
     test.ok(actorref1);
     test.ok(actorref1.path);
-    test.equal(actorref1.path, "sactors://my-sys/1");
+    test.equal(actorref1.path, "sactors://my-sys/_1");
 
     test.ok(actorref2);
     test.ok(actorref2.path);
-    test.equal(actorref2.path, "sactors://my-sys/2");
+    test.equal(actorref2.path, "sactors://my-sys/_2");
 
     test.done();
 }
