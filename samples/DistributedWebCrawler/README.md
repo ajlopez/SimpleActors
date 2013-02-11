@@ -10,11 +10,15 @@ Example:
 ```
 node server.js http://ajlopez.wordpress.com
 ```
-Then many clients can be launched using:
+The server listen on port 3000.
+
+Then many clients can be launched using different ports:
 ```
-node client.js
+node client.js port
 ```
+
 ## To be done
+
 - Configure the client with server host address
 - Manage of client disconnection
 

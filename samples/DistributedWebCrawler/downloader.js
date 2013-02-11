@@ -4,6 +4,7 @@ var simpleactors = require('../../'),
 
 function Downloader() {    
     this.receive = function(link) {
+        console.log('link', link);
         var self = this;
         var urldata = url.parse(link);
         
@@ -15,14 +16,14 @@ function Downloader() {
         };
         
         http.get(options, function(res) { 
-                console.log('Url: ' + link);
+                console.log('url', link);
                 res.setEncoding('utf8');
                 res.on('data', function(data) {
                     self.harvester.tell(data);
                 });
            }).on('error', function(e) {
-                console.log('Url: ' + link);
-                console.log('Error: ' + e.message);
+                console.log('url', link);
+                console.log('error', e.message);
             });
     }
 }

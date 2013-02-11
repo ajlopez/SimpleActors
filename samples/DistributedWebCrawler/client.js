@@ -20,13 +20,24 @@ var webcrawler = node.create('webcrawler');
 var remotenode = node.createRemoteNode(3000);
 var remotesystem = remotenode.create('webcrawler');
 
-// Actors
+// Local Actors
 
-var downloaderref = webcrawler.actorOf(downloader);
-var harvesterref = webcrawler.actorOf(harvester);
+var downloaderref = webcrawler.actorOf(downloader, 'downloader');
+var harvesterref = webcrawler.actorOf(harvester, 'harvester');
+
+// Remote Actors
+
 var resolverref = remotesystem.actorFor('resolver');
+var serverref = remotesystem.actorFor('server');
 
 // Actors Collaboration
 
-downloader.harvester = harvesterActor;
+downloader.harvester = harvesterref;
 harvester.resolver = resolverref;
+
+// Tell to Server the new Downloader path
+
+remotenode.start(function () {
+    serverref.tell(downloaderref.path);
+});
+

@@ -129,6 +129,37 @@ exports['Send Message from Node to Remote Node'] = function (test) {
     });
 }
 
+exports['Send Message from Node to Remote Node using Full Path'] = function (test) {
+    var node = simpleactors.createNode(3000);
+    var system = node.create('mysys');
+    var actor = new MyActor();
+    
+    node.start();
+    
+    test.expect(2);
+
+    actor.receive = function (msg) {
+        test.ok(msg);
+        test.equal(msg, 'foo');
+        node.stop();
+        node2.stop();
+        remotenode.stop();
+        test.done();
+    }
+
+    var actorref = system.actorOf(actor, 'actor');
+
+    var node2 = simpleactors.createNode(3001);
+    var system2 = node2.create('mysys');
+    var remotenode = node2.createRemoteNode(3000);
+    var remotesystem = remotenode.create('mysys');
+    
+    remotenode.start(function() {
+        var remoteref = system2.actorFor(actorref.path);
+        remoteref.tell('foo');
+    });
+}
+
 function MyActor() {
 }
 

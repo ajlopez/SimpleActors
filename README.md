@@ -144,13 +144,13 @@ npm test
 
 ## Samples
 
-[Web Crawler using Agents](https://github.com/ajlopez/SimpleActors/tree/master/samples/WebCrawler) sample shows
+[Web Crawler](https://github.com/ajlopez/SimpleActors/tree/master/samples/WebCrawler) sample shows
 how you can create an application that don't depend on calling a method and receiving a response: each agent
 does its works, receiving calls and sending calls to other agents.
 
-[Web Crawler using Remote Agents](https://github.com/ajlopez/SimpleActors/tree/master/samples/WebCrawlerRemote) sample has a
+[Distributed Web Crawler](https://github.com/ajlopez/SimpleActors/tree/master/samples/DistributedWebCrawler) sample has a
 server that launch the web crawling process, and many clients can be launched that collaborates with the download and
-harvest of new links to process (Work in Progress, Refactoring).
+harvest of new links to process. It uses a custom router.
 
 ## Versions
 
