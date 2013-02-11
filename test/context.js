@@ -73,6 +73,20 @@ exports['actorFor child using full path'] = function(test) {
     test.done();
 }
 
+exports['actorFor child using absolute path'] = function(test) {
+    var system = simpleactors.create('MySystem');
+
+    var myactor = new MyActor();
+    var ref = system.actorOf(myactor, 'myactor');
+    var myactor2 = new MyActor();
+
+    var childref = myactor.context.actorOf(myactor2, 'mychild');
+    var result = myactor.context.actorFor('/myactor/mychild');
+    test.ok(result);
+    test.ok(result === childref);
+    test.done();
+}
+
 exports['actorFor parent'] = function(test) {
     var system = simpleactors.create('MySystem');
 
