@@ -10,9 +10,9 @@
     "test": "nodeunit test"
   }
 , "dependencies": {
+	"simplemessages": "0.0.4"
   }
 , "devDependencies": {
-    "nodeunit": ">= 0.7.4",
-	"simplemessages": "0.0.3"
+    "nodeunit": ">= 0.7.4"
   }
 }

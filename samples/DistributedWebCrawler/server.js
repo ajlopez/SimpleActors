@@ -1,29 +1,9 @@
 
 var simpleactors = require('../../');
 
-function Router() {
-    var refs = [];
-    var position = 0;
-    
-    this.tell = function (msg) {
-        while (refs.length) {
-            try {
-                position = position % refs.length;
-                refs[position++].tell(msg);
-                return;
-            }
-            catch (err) { }
-        }
-    }
-    
-    this.add = function (ref) {
-        refs.push(ref);
-    }
-}
-
 function Server() {
     this.receive = function (path) {
-        router.add(webcrawler.actorFor(path));
+        downloaderref.add(webcrawler.actorFor(path));
     }
 }
 
@@ -44,19 +24,16 @@ var webcrawler = node.create('webcrawler');
 
 // Actors
 
-var downloaderref = webcrawler.actorOf(downloader, 'downloader');
+var downloaderref = webcrawler.actorOf(downloader, 'downloader', { router: true });
 var resolverref = webcrawler.actorOf(resolver, 'resolver');
 var harvesterref = webcrawler.actorOf(harvester, 'harvester');
 var serverref = webcrawler.actorOf(server, 'server');
-
-var router = new Router();
-router.add(downloaderref);
 
 // Actors Collaboration
 
 downloader.harvester = harvesterref;
 harvester.resolver = resolverref;
-resolver.downloader = router;
+resolver.downloader = downloaderref;
 
 // Node start
 
