@@ -157,6 +157,10 @@ harvest of new links to process. It uses a custom router.
 - 0.0.1: Published
 - 0.0.2: Under development, in master.
 
+## References
+
+- [Tiny Actor Run-Time in JavaScript](https://github.com/organix/tartjs)
+
 ## Contribution
 
 Feel free to [file issues](https://github.com/ajlopez/SimpleActors) and submit
